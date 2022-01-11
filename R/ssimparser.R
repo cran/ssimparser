@@ -313,7 +313,8 @@ load_ssim <- function(ssim_file = get_ssim_sample(), nested_df = FALSE, collist 
   if (expand_sched)
   {
     ssimjoin %>%  dplyr::group_by_all() %>%
-      tidyr::expand(n_flight = seq(1:(diff_days + 1))) %>%
+      dplyr::summarise(n_flight = seq(1:(diff_days + 1))) %>%
+      dplyr::ungroup() %>%
       dplyr::filter(diff_days > 0 | (diff_days == 0 & n_flight == 1) ) %>%
       dplyr::mutate(flight.flight_date = type3.std_utc + (n_flight - 1)*24*60*60 ) %>%
       dplyr::rowwise() %>%
